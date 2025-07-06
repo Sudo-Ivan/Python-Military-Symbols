@@ -7,6 +7,14 @@ sys.path.append(os.path.dirname(__file__))
 
 import drawing_items
 
+def _is_safe_path(base_dir: str, target_path: str) -> bool:
+    """
+    Checks if target_path is within base_dir.
+    """
+    base_dir_abs = os.path.abspath(base_dir)
+    target_path_abs = os.path.abspath(target_path)
+    return os.path.commonprefix([target_path_abs, base_dir_abs]) == base_dir_abs
+
 def is_valid_hex_key(key:str, required_length:int=-1) -> bool:
 	"""
 	Returns whether the given key is a valid hex key (string of only hex digits). If required_length is specified,
@@ -550,6 +558,11 @@ class SymbolSet:
 
 		ITEM_TYPES = [("IC", Entity), ("M1", Modifier), ("M2", Modifier)]
 
+		safe_base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'schema'))
+		if not _is_safe_path(safe_base_dir, filepath):
+			print(f'Error: Attempted to access path outside of schema directory: "{filepath}"', file=sys.stderr)
+			return None
+
 		if not os.path.exists(filepath):
 			print(f'No file "{filepath}" in parsing SymbolSet', file=sys.stderr)
 			return None
@@ -679,6 +692,10 @@ class Schema:
 		"""
 		Parses a set of constants from a given filepath
 		"""
+		safe_base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'schema'))
+		if not _is_safe_path(safe_base_dir, filepath):
+			print(f'Error: Attempted to access path outside of schema directory: "{filepath}"', file=sys.stderr)
+			return None
 
 		if not os.path.exists(filepath):
 			print(f'No constant file "{filepath}"', file=sys.stderr)
@@ -768,9 +785,22 @@ class Schema:
 		"""
 		Parses the schema from a directory of files
 		"""
+		safe_base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'schema'))
+		if not _is_safe_path(safe_base_dir, directory):
+			print(f'Error: Attempted to load schema from outside safe directory: "{directory}"', file=sys.stderr)
+			return None
 
 		schema = cls()
 		files = glob.glob(os.path.join(directory, '*.json'))
+
+		# Filter files to ensure they are within the safe directory
+		safe_files = []
+		for f in files:
+			if _is_safe_path(safe_base_dir, f):
+				safe_files.append(f)
+			else:
+				print(f'Warning: Skipping file outside safe directory: "{f}"', file=sys.stderr)
+		files = safe_files
 
 		# Parse the constant file
 		constant_files = [f for f in files if os.path.basename(f) == 'constants.json']

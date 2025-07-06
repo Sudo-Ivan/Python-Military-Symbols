@@ -123,8 +123,28 @@ class SymbolElement:
 		def copy_with_stroke(self, stroke_width=None, stroke_color=None, stroke_dashed=None, stroke_style=None):
 			ret = copy.copy(self)
 
+			# Validate and sanitize inputs
+			if stroke_width is not None:
+				if not isinstance(stroke_width, (int, float)) or stroke_width < 0:
+					raise ValueError("stroke_width must be a non-negative number.")
+			if stroke_color is not None:
+				if not isinstance(stroke_color, str) or stroke_color not in COLORS:
+					raise ValueError(f"stroke_color must be one of {COLORS}.")
+			if stroke_dashed is not None:
+				if not isinstance(stroke_dashed, bool):
+					raise ValueError("stroke_dashed must be a boolean.")
+			if stroke_style is not None:
+				if not isinstance(stroke_style, str) or stroke_style not in ['butt', 'round', 'square']:
+					raise ValueError("stroke_style must be 'butt', 'round', or 'square'.")
+
 			if hasattr(self, 'items'):
-				setattr(ret, 'items', [e.copy_with_stroke(stroke_width=stroke_width, stroke_color=stroke_color, stroke_dashed=stroke_dashed, stroke_style=stroke_style) for e in getattr(ret, 'items')])
+				# Recursively call copy_with_stroke on items, passing validated inputs
+				setattr(ret, 'items', [e.copy_with_stroke(
+					stroke_width=stroke_width,
+					stroke_color=stroke_color,
+					stroke_dashed=stroke_dashed,
+					stroke_style=stroke_style
+				) for e in getattr(ret, 'items')])
 
 			return ret.with_stroke(stroke_width=stroke_width, stroke_color=stroke_color, stroke_dashed=stroke_dashed, stroke_style=stroke_style)
 
