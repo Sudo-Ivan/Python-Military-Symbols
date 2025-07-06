@@ -92,8 +92,6 @@ def fuzzy_match(schema, name_string, candidate_list, match_longest=True, verbose
             else:
                 return 0.0
 
-        sym_set_a = a[1].symbol_set if hasattr(a[1], 'symbol_set') else None
-        sym_set_b = b[1].symbol_set if hasattr(b[1], 'symbol_set') else None
 
         match_weight_a = calc_match_weight(ent_a)
         match_weight_b = calc_match_weight(ent_b)
@@ -187,7 +185,7 @@ def name_to_symbol(name: str, schema:Schema, verbose: bool = False, limit_to_sym
         print(f'\tMatching "{proc_name_string}"')
 
     # Step 0: Check for templates
-    template: template.Template = None
+    template = None
     template, new_name_string = fuzzy_match(schema, proc_name_string, templates_to_use, print_candidates=True)
     ret_symbol: Symbol = None
 

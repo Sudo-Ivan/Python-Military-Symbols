@@ -146,7 +146,7 @@ class FrameShape:
 
 	@classmethod
 	def from_dict(cls, id_code:str, json:dict, over_dict:dict):
-		frame_shape:frame_shape = cls()
+		frame_shape = cls()
 		frame_shape.id_code = id_code
 		frame_shape.names = json.get('names', [id_code])
 
@@ -242,10 +242,6 @@ class Status:
 	def __repr__(self):
 		return f"Status {self.id_code} ({' / '.join(self.names)})"
 
-		if not is_valid_hex_key(status_id, 1):
-			print(f"Bad status {status_id}", file=sys.stderr)
-			return None
-
 	def is_dashed(self) -> bool:
 		return self.dashed
 
@@ -324,7 +320,7 @@ class HQTFD:
 		hqtfd.id_code = id_code
 		hqtfd.names = json.get('names', [])
 		if len(hqtfd.names) < 1:
-			print(f"No names for amplifier {self.id_code}")
+			print(f"No names for amplifier {hqtfd.id_code}")
 			return None
 
 		hqtfd.dashed = json.get("dashed", False)
@@ -396,7 +392,7 @@ class Amplifier:
 		amplifier.id_code = id_code
 		amplifier.names = json.get("names", [])
 		if len(amplifier.names) < 1:
-			print(f"No names for amplifier {self.id_code}", file=sys.stderr)
+			print(f"No names for amplifier {amplifier.id_code}", file=sys.stderr)
 			return None
 
 		amplifier.category = json.get("category", "")
@@ -477,7 +473,7 @@ class SymbolLayer:
 	@classmethod
 	def parse_from_dict(cls, id_code:str, json:dict, full_items:dict, schema, symbol_set = None):
 		if 'icon' not in json or 'names' not in json:
-			print('No keys in {}'.format(uid), file=sys.stderr)
+			print('No keys in {}'.format(id_code), file=sys.stderr)
 			return None
 
 		# if not is_valid_hex_key(id_code):
@@ -785,7 +781,6 @@ class Schema:
 		schema.parse_constants_from_file(filepath=constant_files[0])
 
 		# Parse all the JSON files
-		symbol_sets = []
 		for filename in [f for f in files if os.path.basename(f) != 'constants.json']:
 			if verbose:
 				print(f'Parsing "{filename}"...')

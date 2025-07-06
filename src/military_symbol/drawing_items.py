@@ -150,7 +150,7 @@ class SymbolElement:
 				raise Exception(f"Non-bool or string fill color {element}")
 				return None
 
-			if type(element) == str:
+			if isinstance(element, str):
 				if element not in COLORS:
 					raise Exception(f"Unknown fill color \"{element}\"")
 					return None
@@ -160,7 +160,7 @@ class SymbolElement:
 
 				return element
 
-			if type(element) == bool:
+			if isinstance(element, bool):
 				return 'icon' if element else None
 
 			return None
@@ -210,9 +210,6 @@ class SymbolElement:
 			return new_element
 
 		def cpp(self, schema, output_style=OutputStyle(), with_bbox=False):
-			ordering = [affiliation.id_code for affiliation in schema.full_frame_ordering]
-			elements_ordered = [(item, self.elements[item]) for item in ordering]
-
 			ret = 'DrawCommand::full_frame('
 
 			items = []
@@ -658,7 +655,7 @@ class SymbolElement:
 
 	@staticmethod
 	def parse_list_from_json(item:list, full_items:dict = {}, affiliations:dict = {}) -> list:
-		if type(item) != list:
+		if not isinstance(item, list):
 			raise Exception(f'Type of icon command list \"{item}\" is not a list')
 
 		ret = []

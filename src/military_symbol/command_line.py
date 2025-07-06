@@ -288,7 +288,7 @@ def command_line_main():
         style_name = [name for name in STYLE_CHOICES if name[0] == style_name[0]][0]
 
     if arguments.template_filename != '':
-        add_symbol_template_set(arguments.template_filename)
+        add_templates_from_file(arguments.template_filename)
 
     # Handle limiting to symbol sets
     limit_to_symbol_sets = []

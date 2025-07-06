@@ -56,7 +56,7 @@ class Template():
 
 		try:
 			ret.symbol = Symbol.from_sidc(sidc=symbol_sidc, schema=schema)
-		except ex:
+		except Exception as ex:
 			raise Exception(f'Error loading template from SIDC {sidc}: {ex}')
 
 		for item_name, (start, length, attr) in Template.ITEMS.items():
@@ -73,7 +73,7 @@ class Template():
 		return f'{'/'.join([f'"{name}"' for name in self.names])}{f' [{self.sidc}]' if self.sidc else ''}{self.symbol}'
 
 	@classmethod
-	def load_from_dict(cls, data:dict, schema:Schema, names:list = [], verbose:bool=False):
+	def load_from_dict(cls, data:dict, schema:Schema, names:list = [], verbose:bool=False, filename:str=''):
 		names = names + data.get('names', [])
 		if 'sidc' in data:
 			#raise Exception(f'Template file "{filename}" item "{name}" doesn\'t have a "sidc" entry')
@@ -151,10 +151,8 @@ class Template():
 
 		ret = []
 		for name, data in data.items():
-			template = Template.load_from_dict(names=[name], schema=schema, data=data, verbose=verbose)
+			template = Template.load_from_dict(names=[name], schema=schema, data=data, verbose=verbose, filename=filename)
 			if template is not None:
 				ret.append(template)
 
 		return ret
-
-

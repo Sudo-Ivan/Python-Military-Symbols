@@ -1,7 +1,9 @@
-from schema import *
+import sys
+from schema import Context, Affiliation, Status, HQTFD, Amplifier, SymbolSet, Entity, Modifier, Schema
 from output_style import OutputStyle
 import re
 import os
+import drawing_items
 from drawing_items import BBox
 import math
 
@@ -296,7 +298,6 @@ class Symbol():
 			'mine orange': (255, 141, 42),
 			'mine bright green': (0, 255, 0),
 			'mine dark green': (0, 130, 24),
-			'mine dark green': (0, 130, 24),
 			'mine red': (255, 0, 0),
 			'white': (255, 255, 255) if output_style.fill_style != 'unfilled' else None,
 			'yellow': (255, 255, 128)
@@ -340,6 +341,3 @@ if __name__ == '__main__':
 			with open(os.path.join(test_dir, f'{sidc}.svg'), 'w') as out_file:
 				out_file.write(svg)
 			#print(svg)
-
-
-
