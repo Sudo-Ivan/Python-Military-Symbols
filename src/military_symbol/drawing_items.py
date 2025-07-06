@@ -39,7 +39,7 @@ def convert_color(item):
 		return 'icon' if item else 'none'
 	elif type(item) is str:
 		item = item.lower()
-		if not(item in COLORS):
+		if item not in COLORS:
 			print(f'Unrecognized color "{item}"', file=sys.stderr)
 			return None
 		return item
@@ -57,7 +57,7 @@ class BBox():
 	def __repr__(self) -> str:
 		return f'BBox({self.x_min}, {self.y_min} to {self.x_max}, {self.y_max})'
 
-	@classmethod 
+	@classmethod
 	def from_list(cls, list_items):
 		if len(list_items) != 4:
 			raise Exception(f"Can't create BBox from value \"{list_items}\"")
@@ -122,7 +122,7 @@ class SymbolElement:
 
 		def copy_with_stroke(self, stroke_width=None, stroke_color=None, stroke_dashed=None, stroke_style=None):
 			ret = copy.copy(self)
-			
+
 			if hasattr(self, 'items'):
 				setattr(ret, 'items', [e.copy_with_stroke(stroke_width=stroke_width, stroke_color=stroke_color, stroke_dashed=stroke_dashed, stroke_style=stroke_style) for e in getattr(ret, 'items')])
 
@@ -141,7 +141,7 @@ class SymbolElement:
 				self.fill_color if self.fill_color is not None and self.fill_color != '' else 'none',
 				self.stroke_color if self.stroke_color is not None and self.fill_color != '' else 'none',
 				f' stroke-width="{self.stroke_width}"' if self.stroke_color is not None and self.stroke_color != '' else '',
-				f' stroke-dasharray="8 8"' if self.stroke_dashed and self.stroke_color is not None else '',
+				' stroke-dasharray="8 8"' if self.stroke_dashed and self.stroke_color is not None else '',
 				f' stroke-linecap="{self.stroke_style}"' if self.stroke_style is not None else ''
 			)
 
@@ -194,7 +194,7 @@ class SymbolElement:
 			new_element = cls(affiliations=affiliations.values())
 			affiliation_dict = {a.names[0]: a for a in affiliations}
 			for type_name, type_entry in json.items():
-				if not(type_name in [a.names[0] for a in affiliations]):
+				if type_name not in [a.names[0] for a in affiliations]:
 					print('Error: Unrecognized FF type "{}"'.format(type_name), file=sys.stderr)
 					return None
 
@@ -298,7 +298,7 @@ class SymbolElement:
 
 		def get_bbox(self, symbol, output_style=OutputStyle()) -> BBox:
 			return BBox(
-				x_min = self.pos[0] - self.radius, 
+				x_min = self.pos[0] - self.radius,
 				y_min = self.pos[1] - self.radius,
 				x_max = self.pos[0] + self.radius,
 				y_max = self.pos[1] + self.radius
@@ -321,7 +321,7 @@ class SymbolElement:
 			if self.stroke_width != OutputStyle.DEFAULT_STROKE_WIDTH and self.stroke_color is not None:
 				ret += '.with_stroke_width({})'.format(self.stroke_width)
 			if self.stroke_dashed is not None:
-				ret += '.with_stroke_style(StrokeStyle::DASHED)'			
+				ret += '.with_stroke_style(StrokeStyle::DASHED)'
 			return ret
 
 
@@ -349,11 +349,11 @@ class SymbolElement:
 				font_face = font_rendering.Font(output_style.text_path_font, size = int(self.font_size))
 
 				paths = font_face.render_text(
-					text = self.text, 
+					text = self.text,
 					pos = self.pos,
 					fontsize = int(self.font_size),
 					align = self.align)
-				
+
 				ret_path = ' '.join(paths)
 				path_el = SymbolElement.Path()
 				path_el.fill_color = self.fill_color
@@ -439,11 +439,11 @@ class SymbolElement:
 				font_face = font_rendering.Font(output_style.text_path_font, size = int(self.font_size))
 
 				paths = font_face.render_text(
-					text = self.text, 
+					text = self.text,
 					pos = self.pos,
 					fontsize = int(self.font_size),
 					align = self.align)
-				
+
 				ret_path = ' '.join(paths)
 				path_el = SymbolElement.Path()
 				path_el.fill_color = self.fill_color
@@ -469,7 +469,7 @@ class SymbolElement:
 			if self.stroke_width != OutputStyle.DEFAULT_STROKE_WIDTH and self.stroke_color is not None:
 				ret += '.with_stroke_width({})'.format(self.stroke_width)
 			if self.stroke_dashed is not None:
-				ret += '.with_stroke_style(StrokeStyle::DASHED)'				
+				ret += '.with_stroke_style(StrokeStyle::DASHED)'
 
 			return ret
 
@@ -587,7 +587,7 @@ class SymbolElement:
 
 		if 'text' in item or 'textm1' in item or 'textm2' in item:
 			# Parse text
-			new_element = SymbolElement.Text.parse_from_dict(json=item)	
+			new_element = SymbolElement.Text.parse_from_dict(json=item)
 		elif 'd' in item:
 			# Parse path
 			new_element = SymbolElement.Path.parse_from_dict(json=item)
@@ -660,7 +660,7 @@ class SymbolElement:
 	def parse_list_from_json(item:list, full_items:dict = {}, affiliations:dict = {}) -> list:
 		if type(item) != list:
 			raise Exception(f'Type of icon command list \"{item}\" is not a list')
-			
+
 		ret = []
 		for item_dict in item:
 			ret.extend(SymbolElement.parse_from_dict(item=item_dict, full_items=full_items, affiliations=affiliations))

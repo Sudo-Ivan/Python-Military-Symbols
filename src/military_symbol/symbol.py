@@ -41,11 +41,11 @@ class Symbol():
 			f'context = {self.context.names[0]}',
 			f'affiliation = {self.affiliation.names[0] if self.affiliation else 'none'} [{self.affiliation.id_code if self.affiliation else 'none'}]',
 			f'symbol set = {self.symbol_set.names[0] if self.symbol_set else 'none'} [{self.symbol_set.id_code if self.symbol_set else 'none'}]',
-			
+
 			f'dimension = {self.symbol_set.dimension.names[0] if self.symbol_set and self.symbol_set.dimension else 'none'} [{self.symbol_set.dimension.id_code if self.symbol_set and self.symbol_set.dimension else 'none'}]',
 			f'frame shape = {self.symbol_set.dimension.frame_shape.names[0] if self.symbol_set else 'none'} [{self.symbol_set.dimension.frame_shape.id_code if self.symbol_set else 'none'}]',
 			f'entity = {self.entity.names[0]} [{self.entity.id_code}]' if self.entity is not None else 'entity = none',
-		] 
+		]
 			+ ([] if self.frame_shape_override is None else [f'frame shape override = {self.frame_shape_override.names[0]}'])
 			+ ([] if self.modifier_1 is None else [f'm1 = {self.modifier_1.names[0]}'])
 			+ ([] if self.modifier_2 is None else [f'm2 = {self.modifier_2.names[0]}'])
@@ -85,9 +85,9 @@ class Symbol():
 
 		ret = cls()
 		ret.schema = schema
-		
+
 		# Digits 0,1 are version
-		
+
 		# Digit 2 is the context
 		ret.context = schema.contexts.get(sidc[2], schema.contexts['0'])
 
@@ -109,7 +109,7 @@ class Symbol():
 			print(f'Unknown symbol set \"{sidc[4:6]}\"', file=sys.stderr)
 			return ret
 
-		# Digits 10-15 are the 
+		# Digits 10-15 are the
 		entity_code:str = sidc[10:16]
 		fallbacks:list = [entity_code, f'{entity_code[0:4]}00', f'{entity_code[0:2]}0000']
 		for code_index, code in enumerate(fallbacks):
@@ -117,7 +117,7 @@ class Symbol():
 				ret.entity = ret.symbol_set.entities[code]
 				break
 
-			print(f'Entity "{entity_code}" not found in symbol set "{ret.symbol_set.names[0]}"; falling back to {fallbacks[code_index + 1] if code_index < 2 else '000000'}', file=sys.stderr)			
+			print(f'Entity "{entity_code}" not found in symbol set "{ret.symbol_set.names[0]}"; falling back to {fallbacks[code_index + 1] if code_index < 2 else '000000'}', file=sys.stderr)
 
 		mod_1_prefix, mod_2_prefix = '', ''
 		mod_1_set:SymbolSet = ret.symbol_set
@@ -154,7 +154,7 @@ class Symbol():
 
 		frame_commands = []
 
-		SVG_NAMESPACE:str = "http://www.w3.org/2000/svg";
+		SVG_NAMESPACE:str = "http://www.w3.org/2000/svg"
 
 		if self.is_frame_dashed():
 			base_frame = frame_to_use.frames[self.affiliation.frame_id]
@@ -173,7 +173,7 @@ class Symbol():
 				base_frame = frame_to_use.frames[self.affiliation.frame_id]
 				elements += [base_frame[0].copy_with_fill(fill_color=None).svg(symbol=self, output_style=output_style)]
 				elements += [e.svg(symbol=self, output_style=output_style) for e in base_frame[1:]]
-		
+
 		frame_commands += [c for c in frame_to_use.frames[self.affiliation.frame_id]]
 
 		frame_bbox = BBox.merge_all([e.get_bbox(symbol=self, output_style=output_style) for e in frame_to_use.frames[self.affiliation.frame_id]])
@@ -210,9 +210,9 @@ class Symbol():
 			tf_width = 100 if not has_amps else (amplifier_bbox.width() + 20)
 
 			bounds = BBox(
-				x_min = 100 - (tf_width / 2), 
-				x_max = 100 + (tf_width / 2), 
-				y_min = amplifier_bbox.y_min - (5 if has_amps else 20), 
+				x_min = 100 - (tf_width / 2),
+				x_max = 100 + (tf_width / 2),
+				y_min = amplifier_bbox.y_min - (5 if has_amps else 20),
 				y_max = frame_bbox.y_min)
 
 			bounds.y_min = bounds.y_min - 5
@@ -223,12 +223,12 @@ class Symbol():
 			ret_bbox.merge(bounds)
 			amplifier_bbox.merge(bounds)
 			elements += [cmd.svg(symbol=self, output_style=output_style)]
-			
+
 		if self.is_dummy():
 			half_width = frame_bbox.width() * 0.5
 			height = round(half_width * math.tan(math.pi / 4), 6)
 			origin = (frame_bbox.x_min, amplifier_bbox.y_min - 3 if has_amps else frame_bbox.y_min - 3)
-			cmd = drawing_items.SymbolElement.Path(d=f"M {origin[0]},{origin[1]} l {half_width},-{height} L {frame_bbox.x_max},{origin[1]}", 
+			cmd = drawing_items.SymbolElement.Path(d=f"M {origin[0]},{origin[1]} l {half_width},-{height} L {frame_bbox.x_max},{origin[1]}",
 				bbox=BBox(x_min=origin[0], y_min=origin[1] - height, x_max = origin[1] + (2*half_width), y_max = origin[1]),
 				stroke_dashed=True)
 
@@ -340,6 +340,6 @@ if __name__ == '__main__':
 			with open(os.path.join(test_dir, f'{sidc}.svg'), 'w') as out_file:
 				out_file.write(svg)
 			#print(svg)
-		
+
 
 

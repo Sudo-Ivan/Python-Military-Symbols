@@ -62,7 +62,7 @@ def fuzzy_match(schema, name_string, candidate_list, match_longest=True, verbose
         if exact_match(name_string, match[0]):
             matches = [(name, cand) for (name, cand) in matches if exact_match(name, name_string)]
             break
-    
+
             if print_candidates:
                 print('An exact match was found')
                 print(matches)
@@ -178,7 +178,7 @@ def name_to_symbol(name: str, schema:Schema, verbose: bool = False, limit_to_sym
 
     if verbose and limit_to_symbol_sets is not None:
         print(f'\tLimiting to symbol sets {[e.names[0] for e in limit_to_symbol_sets]}')
-    
+
     # Sanitize string
     proc_name_string = proc_name_string.lower()
     proc_name_string = re.sub('[ \t\n]+', ' ', proc_name_string).strip()
@@ -275,7 +275,7 @@ def name_to_symbol(name: str, schema:Schema, verbose: bool = False, limit_to_sym
 
             if verbose:
                 name = entity_type.names[0] if len(entity_type.names) > 0 else ''
-                print(f'\tAssuming entity "{name}" ({entity_type.id_code}) ' + 
+                print(f'\tAssuming entity "{name}" ({entity_type.id_code}) ' +
                     f'from symbol set "{entity_type.symbol_set.names[0]}" leaving \"{proc_name_string}\"')
 
     # Amplifier post-run
@@ -385,7 +385,7 @@ if __name__ == '__main__':
 
     for name in TEST_NAMES:
         print(f'Testing "{name}"')
-        symbol = name_to_symbol(name=name, schema=schema, verbose=True, templates=template_list)       
+        symbol = name_to_symbol(name=name, schema=schema, verbose=True, templates=template_list)
         svg = symbol.get_svg()
 
         with open(os.path.join(test_dir, f'{name}.svg'), 'w') as out_file:

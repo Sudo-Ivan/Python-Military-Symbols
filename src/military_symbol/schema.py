@@ -28,7 +28,7 @@ class Context:
 	Represents a standard identity context
 	"""
 	def __init__(self):
-		self.id_code:str = ""      # The ID code of the context, a 1-digit hexadecimal 
+		self.id_code:str = ""      # The ID code of the context, a 1-digit hexadecimal
 		self.names:list  = []      # The names of the context
 		self.base_context:str = "" # The base context this belongs to (reality, exercise, or simulation)
 		self.match_name:bool = True
@@ -182,7 +182,7 @@ class FrameShape:
 			return ret, amplifier_offsets
 
 		frames, amplifier_offsets = create_base_frames(json=json, over_dict=over_dict)
-		
+
 		if frames is None:
 			raise Exception(f'No frames in frame set {id_code}')
 			return None
@@ -253,7 +253,7 @@ class Status:
 	def from_dict(id_code:str, json:dict, affiliations:dict):
 		if not is_valid_hex_key(id_code, 1):
 			print(f"Bad status {id_code}", file=sys.stderr)
-			return None			
+			return None
 
 		status:Status = Status()
 		status.id_code = id_code
@@ -366,7 +366,7 @@ class Amplifier:
 
 	def applies_to_symbol_set(self, symbol_set) -> bool:
 		if symbol_set is None:
-			return False 
+			return False
 		if symbol_set.common:
 			return True
 
@@ -400,7 +400,7 @@ class Amplifier:
 			return None
 
 		amplifier.category = json.get("category", "")
-		amplifier.applies_to = [] 
+		amplifier.applies_to = []
 		for apt in json.get("applies to", []):
 			if apt not in schema.dimensions:
 				print(f"Bad applies to dimension \"{apt}\" for amplifier {amplifier.id_code}", file=sys.stderr)
@@ -430,7 +430,7 @@ class Amplifier:
 		)
 
 	def icon_svg(self, symbol, schema):
-		return 
+		return
 
 
 """
@@ -536,7 +536,7 @@ class SymbolSet:
 		self.m2:dict = {}
 		self.match_name:bool = True
 		self.match_weight:float = 0.0
-		
+
 	def __lt__(self, other) -> bool:
 		if self.common != other.common:
 			return not self.common
@@ -570,7 +570,7 @@ class SymbolSet:
 			item_type: {} for item_type, ItemTypeClass in ITEM_TYPES
 		}
 
-		if not ('set' in json_dict):
+		if 'set' not in json_dict:
 			print("No set", file=sys.stderr)
 			return None
 
@@ -590,7 +590,7 @@ class SymbolSet:
 		ret_set.match_name = json_dict.get('match name', True)
 
 		for item_type, ItemTypeClass in ITEM_TYPES:
-			if not (item_type in json_dict):
+			if item_type not in json_dict:
 				continue
 
 			for item_code, item in json_dict[item_type].items():
@@ -605,7 +605,7 @@ class SymbolSet:
 					ret[item_type][item_code] = new_symbol_layer
 				else:
 					print(f'Unable to process item {json_dict["set"]}:{item_type}:{item_code}: {item["names"]}', file=sys.stderr)
-					return 
+					return
 
 		ret_set.id_code = icon_set
 		ret_set.entities = {item: ret['IC'][item] for item in ret['IC'].keys() if item[0] != '.'} # Ignore utility symbols
@@ -628,7 +628,7 @@ class Schema:
 		## The order in which full frame symbols are expected (for C++)
 		self.full_frame_ordering:list = []
 
-		
+
 		## The frame shapes in this schema
 		self.frame_shapes:dict = {}
 		## The dimensions this schema has
@@ -697,7 +697,7 @@ class Schema:
 
 		if verbose:
 			print(f'Parsing constant file \"{filepath}\"')
-			
+
 		# Validate required keys
 		REQUIRED_KEYS:list = ['contexts', 'affiliations', 'color modes', 'dimensions', 'full frame ordering']
 		for required_key in REQUIRED_KEYS:
@@ -794,7 +794,7 @@ class Schema:
 				print(f"Bad symbol set file \"{filename}\"", file=sys.stderr)
 				continue
 
-			schema.symbol_sets[symbol_set.id_code] = symbol_set		
+			schema.symbol_sets[symbol_set.id_code] = symbol_set
 		return schema
 
 	@classmethod

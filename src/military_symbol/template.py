@@ -1,6 +1,5 @@
 import os
 import re
-import json
 import sys
 import yaml
 import copy
@@ -8,7 +7,6 @@ import copy
 sys.path.append(os.path.dirname(__file__))
 from schema import Schema
 from symbol import Symbol
-import name_to_sidc
 
 class Template():
 	"""
@@ -16,11 +14,11 @@ class Template():
 	"""
 
 	ITEMS:list = {
-		'context': (2, 1, 'contexts'), # Start, length 
+		'context': (2, 1, 'contexts'), # Start, length
 		'affiliation': (3, 1, 'affiliations'),
 		'symbol_set': (4, 2, 'symbol_sets'),
 		'status': (6, 1, 'statuses'),
-		'hqtfd': (7, 1, 'hqtfds'), 
+		'hqtfd': (7, 1, 'hqtfds'),
 		'amplifier': (8, 2, 'amplifiers'),
 
 		'entity': (10, 6, 'entities'),
@@ -42,7 +40,7 @@ class Template():
 	def get_names(self) -> list:
 		return self.names
 
-	@classmethod 
+	@classmethod
 	def load_from_sidc(cls, sidc:str, schema:Schema, names:list = [], verbose:bool=False):
 		sidc = re.sub(r'\s+', '', sidc)
 		if len(sidc) < 2:
@@ -130,9 +128,9 @@ class Template():
 					print(f'\"{item_code}\" is not a valid value for symbol set {temp.symbol.symbol_set.id_code} {item_name}; skipping', file=sys.stderr)
 					return None
 
-				setattr(temp.symbol, item_name, choices[item_code])	
+				setattr(temp.symbol, item_name, choices[item_code])
 				setattr(temp, f'{item_name}_is_flexible', False)
-				
+
 
 		if temp.symbol.context is None:
 			temp.symbol.context = schema.contexts['0']

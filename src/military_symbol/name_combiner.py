@@ -22,5 +22,5 @@ if True: #__name__ == '__main__':
 				results.append(f'{item_2} {item_1}')
 
 	results = list(set([re.sub(r'\s+', ' ', i).strip() for i in results]))
-	
+
 	print('[' + ', '.join([f'"{item}"' for item in results]) + '],')

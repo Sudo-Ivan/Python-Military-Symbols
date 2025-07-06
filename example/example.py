@@ -4,7 +4,6 @@ command line
 """
 
 import os
-import inspect
 
 import military_symbol
 
@@ -32,7 +31,7 @@ if __name__ == '__main__':
     ]
 
     for example_name, example_style in examples:
-        example_symbol, svg_string = military_symbol.get_symbol_and_svg_string(example_name, 
+        example_symbol, svg_string = military_symbol.get_symbol_and_svg_string(example_name,
                                                                                is_sidc=False,
                                                                                style=example_style,
                                                                                padding=4,

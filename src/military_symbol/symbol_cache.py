@@ -4,7 +4,6 @@ import os
 sys.path.append(os.path.dirname(__file__))
 from symbol import Symbol
 import name_to_sidc
-from schema import Schema
 from output_style import OutputStyle
 
 class SymbolCache:
@@ -89,7 +88,7 @@ class SymbolCache:
         else:
             return self.get_symbol_from_name(creator_var, create_if_missing, verbose=verbose, limit_to_symbol_sets=limit_to_symbol_sets)
 
-    def get_symbol_and_svg_string(self, creator_val:str, is_sidc:bool, padding:int, style:str, use_variants:bool, 
+    def get_symbol_and_svg_string(self, creator_val:str, is_sidc:bool, padding:int, style:str, use_variants:bool,
         use_background:bool=True, background_color:str='#ffffff', create_if_missing:bool=True, verbose:bool=False, force_all_elements:bool=False,
         limit_to_symbol_sets=None) -> tuple:
 
@@ -123,22 +122,22 @@ class SymbolCache:
         else:
             return symbol, svg_string
 
-    def get_svg_string(self, creator_val:str, is_sidc:bool, padding:int, style:str, use_variants:bool, use_background:bool=True, 
+    def get_svg_string(self, creator_val:str, is_sidc:bool, padding:int, style:str, use_variants:bool, use_background:bool=True,
         background_color:str='#ffffff', create_if_missing:bool=True, verbose:bool=False, force_all_elements:bool=False,
         limit_to_symbol_sets=None):
 
-        return self.get_symbol_and_svg_string(creator_val, is_sidc, padding, style, use_variants, use_background, 
+        return self.get_symbol_and_svg_string(creator_val, is_sidc, padding, style, use_variants, use_background,
             background_color, create_if_missing, verbose=verbose, force_all_elements=force_all_elements)[1]
 
-    def get_svg_string_from_name(self, name, padding:int, style:str, use_variants:bool=False, use_background:bool=True, 
+    def get_svg_string_from_name(self, name, padding:int, style:str, use_variants:bool=False, use_background:bool=True,
         background_color:str='#ffffff', create_if_missing:bool=True, verbose:bool=False, force_all_elements:bool=False,
         limit_to_symbol_sets=None):
 
-        return self.get_svg_string(name, False, padding, style, use_variants, use_background, background_color, create_if_missing, 
+        return self.get_svg_string(name, False, padding, style, use_variants, use_background, background_color, create_if_missing,
             verbose=verbose, force_all_elements=force_all_elements)
 
-    def get_svg_string_from_sidc(self, sidc, padding:int, style:str, use_variants:bool=False, use_background:bool=True, 
+    def get_svg_string_from_sidc(self, sidc, padding:int, style:str, use_variants:bool=False, use_background:bool=True,
         background_color:str='#ffffff', create_if_missing:bool=True, verbose:bool=False, force_all_elements:bool=False):
 
-        return self.get_svg_string(sidc, True, padding, style, use_variants, use_background, background_color, create_if_missing, 
+        return self.get_svg_string(sidc, True, padding, style, use_variants, use_background, background_color, create_if_missing,
             verbose=verbose, force_all_elements=force_all_elements)
