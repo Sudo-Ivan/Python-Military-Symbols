@@ -13,3 +13,4 @@
 /src/__pycache__/
 /src/test/
 *.svg
+.ruff_cache
