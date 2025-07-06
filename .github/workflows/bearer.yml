@@ -21,11 +21,4 @@ jobs:
       - name: Run Bearer security scan
         uses: bearer/bearer-action@v2
         with:
-          args: scan --format json --output bearer-report.json
-          
-      - name: Upload Bearer report
-        uses: actions/upload-artifact@v3
-        with:
-          name: bearer-security-report
-          path: bearer-report.json
-          retention-days: 30 
+          args: scan --format json --output bearer-report.json 
